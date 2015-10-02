@@ -54,8 +54,8 @@ namespace :sidekiq do
       processes.times do |idx|
         sidekiq_pid = fetch(:sidekiq_pid).sub(/\.pid$/, "-#{fetch(:sidekiq_role)}.pid")
 
-        if idx.zero? && processes <= 1
-          sidekiq_pid.sub(/\.pid$/, "-#{idx}.pid")
+        unless idx.zero? && processes <= 1
+          sidekiq_pid.sub!(/\.pid$/, "-#{idx}.pid")
         end
 
         pids.push sidekiq_pid
