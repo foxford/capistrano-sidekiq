@@ -158,7 +158,7 @@ namespace :sidekiq do
   desc 'Stop sidekiq'
   task :stop do
     for_each_sidekiq_role do
-      on roles fetch(:sidekiq_role) do
+      on roles fetch(:sidekiq_role) do |server|
         if sidekiq_options = server.properties.fetch(fetch(:sidekiq_role))
           set :sidekiq_processes, sidekiq_options[:sidekiq_processes]
         end
