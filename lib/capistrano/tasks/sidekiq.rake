@@ -159,6 +159,10 @@ namespace :sidekiq do
   task :stop do
     for_each_sidekiq_role do
       on roles fetch(:sidekiq_role) do
+        if sidekiq_options = server.properties.fetch(fetch(:sidekiq_role))
+          set :sidekiq_processes, sidekiq_options[:sidekiq_processes]
+        end
+
         switch_user do
           if test("[ -d #{release_path} ]")
             for_each_process(true) do |pid_file, idx|
