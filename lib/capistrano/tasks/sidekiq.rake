@@ -141,7 +141,11 @@ namespace :sidekiq do
   desc 'Quiet sidekiq (stop processing new tasks)'
   task :quiet do
     for_each_sidekiq_role do
-      on roles fetch(:sidekiq_role) do
+      on roles fetch(:sidekiq_role) do |server|
+        if sidekiq_options = server.properties.fetch(fetch(:sidekiq_role))
+          set :sidekiq_processes, sidekiq_options[:sidekiq_processes]
+        end
+
         switch_user do
           if test("[ -d #{release_path} ]") # fixes #11
             for_each_process(true) do |pid_file, idx|
@@ -204,7 +208,11 @@ namespace :sidekiq do
   desc 'Rolling-restart sidekiq'
   task :rolling_restart do
     for_each_sidekiq_role do
-      on roles fetch(:sidekiq_role) do
+      on roles fetch(:sidekiq_role) do |server|
+        if sidekiq_options = server.properties.fetch(fetch(:sidekiq_role))
+          set :sidekiq_processes, sidekiq_options[:sidekiq_processes]
+        end
+
         switch_user do
           for_each_process(true) do |pid_file, idx|
             if pid_process_exists?(pid_file)
@@ -220,7 +228,11 @@ namespace :sidekiq do
   # Delete any pid file not in use
   task :cleanup do
     for_each_sidekiq_role do
-      on roles fetch(:sidekiq_role) do
+      on roles fetch(:sidekiq_role) do |server|
+        if sidekiq_options = server.properties.fetch(fetch(:sidekiq_role))
+          set :sidekiq_processes, sidekiq_options[:sidekiq_processes]
+        end
+
         switch_user do
           for_each_process do |pid_file, idx|
             if pid_file_exists?(pid_file)
@@ -237,7 +249,11 @@ namespace :sidekiq do
   task :respawn do
     invoke 'sidekiq:cleanup'
     for_each_sidekiq_role do
-      on roles fetch(:sidekiq_role) do
+      on roles fetch(:sidekiq_role) do |server|
+        if sidekiq_options = server.properties.fetch(fetch(:sidekiq_role))
+          set :sidekiq_processes, sidekiq_options[:sidekiq_processes]
+        end
+
         switch_user do
           for_each_process do |pid_file, idx|
             unless pid_file_exists?(pid_file)
