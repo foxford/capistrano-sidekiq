@@ -15,7 +15,7 @@ Capistrano::Configuration.instance.load do
   _cset(:sidekiq_cmd) { "#{fetch(:bundle_cmd, 'bundle')} exec sidekiq" }
   _cset(:sidekiqctl_cmd) { "#{fetch(:bundle_cmd, 'bundle')} exec sidekiqctl" }
 
-  _cset(:sidekiq_timeout) { 10 }
+  _cset(:sidekiq_timeout) { 30 }
   _cset(:sidekiq_role) { :app }
 
   _cset(:sidekiq_processes) { 1 }
