@@ -135,7 +135,6 @@ namespace :sidekiq do
     after 'deploy:updated', 'sidekiq:stop'
     after 'deploy:reverted', 'sidekiq:stop'
     after 'deploy:published', 'sidekiq:start'
-    after 'deploy:failed', 'sidekiq:restart'
   end
 
   desc 'Quiet sidekiq (stop processing new tasks)'
